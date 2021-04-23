@@ -44,7 +44,7 @@ def on_message(client, userdata, message):
 
 
 if __name__ == "__main__":
-    params = getPreferences("conf.yaml")
+    params = getPreferences("router_preferences.yaml")
     client = paho.Client()
     client.username_pw_set(username=params["broker_user"], password=params["broker_pwd"])
     client.on_connect = on_connect
