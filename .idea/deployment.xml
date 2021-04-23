@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="uc3m@mqtt.uc3m.tk:22" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="pi@10.6.0.9:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/pi/iot-raul" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="uc3m@api.uc3m.tk:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/uc3m/iot-raul" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="uc3m@mqtt.uc3m.tk:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/uc3m/iot-raul" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

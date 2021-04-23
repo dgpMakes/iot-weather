@@ -1,7 +1,5 @@
 from flask import Flask, request
 from flask_cors import CORS
-from load_preferences import get_preferences
-
 from measurements_manager import *
 
 app = Flask(__name__)

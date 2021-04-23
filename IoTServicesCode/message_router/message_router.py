@@ -1,4 +1,4 @@
-import paho
+import paho.mqtt.client as paho
 from device_register_interface import *
 from measurement_register_interface import *
 
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     client = paho.Client()
     client.username_pw_set(username=params["broker_user"], password=params["broker_pwd"])
     client.on_connect = on_connect
-    client.on_connect = on_message
+    client.on_message = on_message
 
     print("connecting to broker ", params["broker_address"])
     client.connect(params["broker_address"], params["broker_port"], params["broker_keep_alive"])

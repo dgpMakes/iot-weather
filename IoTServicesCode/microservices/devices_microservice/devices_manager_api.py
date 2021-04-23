@@ -7,11 +7,13 @@ from devices_manager import *
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/devices/register/', methods=['POST'])
-def save_deviceInfo():
-    params = request.get_json()
-    device_register(params)
+def save_device_info():
+    parameters = request.get_json()
+    device_register(parameters)
     return {"result": "record inserted"}, 201
 
+
 params = getPreferences("microservice_conf.yaml")
-app.run(host= params["host"], port=params["port"])
+app.run(host=params["host"], port=params["port"])
