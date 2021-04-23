@@ -29,10 +29,7 @@ def on_connect(client, userdata, flags, rc):
     else:
         print("Error de conexión: ", rc)
 
-def get_preferences(file):
-    with open(file, 'rb') as f:
-        conf = yaml.load(f.read())
-    return conf
+
 
 def on_message(client, userdata, message):
     global current_temperature, current_humidity

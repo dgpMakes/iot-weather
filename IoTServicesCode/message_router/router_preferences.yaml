@@ -1,0 +1,5 @@
+broker_address: "mqtt.uc3m.tk"
+broker_port: 1883
+broker_keep_alive: 60
+broker_user: "dieog"
+broker_pwd: "superdiego"
