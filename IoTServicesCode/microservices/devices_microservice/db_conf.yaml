@@ -1,0 +1,4 @@
+dbhost: "db.uc3m.tk"
+dbuser: "iot_user"
+dbpassword: "superdiego"
+dbdatabase: "iot_data"

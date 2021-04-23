@@ -1,5 +1,8 @@
 broker_address: "mqtt.uc3m.tk"
 broker_port: 1883
 broker_keep_alive: 60
-broker_user: "dieog"
+broker_user: "diego"
 broker_pwd: "superdiego"
+
+server: "35.234.85.244"
+port: 5001

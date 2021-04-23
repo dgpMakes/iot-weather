@@ -1,23 +1,22 @@
-import mysql.connector
-from load_preferences import getPreferences
+from flask import Flask, request
+from flask_cors import CORS
+from load_preferences import get_preferences
 
-def connect_database ():
-    file = 'db_conf.yaml'
-    params = getPreferences(file)
+from measurements_manager import *
 
-    mydb = mysql.connector.connect(
-        host = params["dbhost"],
-        user = params["dbuser"],
-        password = params["dbpassword"],
-        database = params["dbdatabase"]
-    )
-    return mydb
+app = Flask(__name__)
+CORS(app)
 
-def measurements_register(params):
-    mydb = connect_database()
-    with mydb.cursor() as mycursor:
-        sql = "INSERT INTO sensor_data (temperature, humidity) VALUES (%s, %s)"
-        val = (params["temperature"], params["humidity"])
-        mycursor.execute(sql, val)
-        mydb.commit()
-        print(mycursor.rowcount,"record inserted.")
+#API INTERFACE 34
+@app.route('/measurements/register', methods=['POST'])
+def set_measurement():
+    params = request.get_json()
+    measurements_register(params)
+    return {"result":"record inserted"}, 201
+
+@app.route('/measurements/retrieve/')
+def get_measurements():
+    return measurements_retriever()
+
+params = getPreferences("microservice_conf.yaml")
+app.run(host=params["host"], port=params["port"])

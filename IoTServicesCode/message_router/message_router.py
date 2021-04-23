@@ -1,7 +1,6 @@
-import paho.mqtt.client as mqtt
-import yaml
 import paho
-import requests
+from device_register_interface import *
+from measurement_register_interface import *
 
 my_json = []
 current_temperature = "0"
@@ -10,14 +9,6 @@ current_humidity = "0"
 TEMP_TOPIC = "/uc3m/classrooms/leganes/myclass/temperature"
 HUMIDITY_TOPIC = "/uc3m/classrooms/leganes/myclass/humidity"
 DEVICE_INFO_TOPIC = "/uc3m/classrooms/leganes/myclass/device_info"
-
-def submit_data_to_store(data):
-    params = get_preferences("measurements_microservice_connector.yaml")
-    r = requests.post("http://" + params["server"] + ":" + params["port"] + "/measurements/register", json=data)
-
-def submit_device_info_to_store(data):
-    params = get_preferences("measurements_microservice_connector.yaml")
-    r = requests.post("http://" + params["server"] + ":" + params["port"] + "/measurements/register", json=data)
 
 
 def on_connect(client, userdata, flags, rc):
@@ -28,7 +19,6 @@ def on_connect(client, userdata, flags, rc):
         client.subscribe(DEVICE_INFO_TOPIC)
     else:
         print("Error de conexión: ", rc)
-
 
 
 def on_message(client, userdata, message):
@@ -52,8 +42,9 @@ def on_message(client, userdata, message):
         submit_device_info_to_store(data)
         print(data)
 
+
 if __name__ == "__main__":
-    params = get_preferences("conf.yaml")
+    params = getPreferences("conf.yaml")
     client = paho.Client()
     client.username_pw_set(username=params["broker_user"], password=params["broker_pwd"])
     client.on_connect = on_connect
