@@ -14,6 +14,9 @@ def save_device_info():
     device_register(parameters)
     return {"result": "record inserted"}, 201
 
+@app.route('/devices/retrieve/')
+def retrieve_devices():
+    return devices_retriever()
 
 params = getPreferences("microservice_conf.yaml")
 app.run(host=params["host"], port=params["port"])

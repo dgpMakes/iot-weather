@@ -19,4 +19,4 @@ def get_measurements():
 
 
 params = getPreferences("microservice_conf.yaml")
-app.run(host=params["host"], port=params["port"])
+app.run(host=params["host"], port=str(params["port"]))

@@ -24,3 +24,15 @@ def measurements_register(params):
             print(mycursor.rowcount,"record inserted.")
         except:
             print("Error inserting the device")
+
+def measurements_retriever():
+    mydb = connect_database()
+    r = {}
+    with mydb.cursor() as mycursor:
+        mycursor.execute("SELECT temperature, humidity FROM sensor_data ORDER BY id DESC LIMIT 1;")
+        myresult = mycursor.fetchall()
+        for temperature, humidity in myresult:
+            r = {"temperature": temperature, "humidity": humidity}
+        mydb.commit()
+    return r
+
