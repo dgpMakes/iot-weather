@@ -1,8 +1,8 @@
-measurements_microservice_server: "api.uc3m.tk"
-measurements_microservice_port: 5001
+measurements_microservice_server: "127.0.0.1"
+measurements_microservice_port: 5002
 
-devices_microservice_server: "api.uc3m.tk"
-devices_microservice_port: 5002
+devices_microservice_server: "127.0.0.1"
+devices_microservice_port: 5001
 
 port: 5000
-host: "127.0.0.1"
+host: "0.0.0.0"

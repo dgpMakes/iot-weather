@@ -29,4 +29,4 @@ def get_device_list():
 
 
 params = getPreferences("webapp_conf.yaml")
-app.run(host=params["host"], port=str(params["port"]))
+app.run(host=params["host"], port=str(params["port"]), debug=True)

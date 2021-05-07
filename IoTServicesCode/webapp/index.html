@@ -1,19 +1,70 @@
 <html>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-    
-    <head>
-        <title>
-            UC3M - OS Temperature sensor
-        </title>
-    </head>
-    <body>
-        <script src="script.js"></script>
-        <nav class="navbar navbar-dark sticky-top bg-dark">
-            <a class="navbar-brand" href="#">UC3M - Operating systems</a>
-          </nav>
-            <div class="container">
-            </div>
-        </body>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+  integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/vue-router"></script>
+
+<head>
+  <title>
+    UC3M - OS Temperature sensor
+  </title>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark sticky-top bg-dark">
+    <a class="navbar-brand" href="#">UC3M - Operating systems</a>
+  </nav>
+  <div class="container">
+
+
+
+
+    <div id="app" class="col-sm-12">
+      <h1 class="my-3">Measurements</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Time</th>
+            <th scope="col">Device</th>
+            <th scope="col">Temperature</th>
+            <th scope="col">Humidity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="m in displayedMeasurements">
+            <th scope="row">{{m.device}}</th>
+            <td>{{m.humidity}}</td>
+            <td>{{m.temperature}}</td>
+            <td>{{m.date}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <nav>
+        <p style="display: inline;">Page {{page}} of {{pages.length}}</p>
+
+        <ul class="pagination">
+          <li class="page-item">
+            <button type="button" class="page-link d-inline" v-if="page > 1" @click="page--"> Previous </button>
+          </li>
+          <li class="page-item">
+            <button type="button" @click="page++" v-if="page < pages.length" class="page-link d-inline"> Next </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+
+
+
+  </div>
+
+  <script src="./script.js"></script>
+
+</body>
+
+
+
 </html>

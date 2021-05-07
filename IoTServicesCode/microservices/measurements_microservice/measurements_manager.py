@@ -27,12 +27,12 @@ def measurements_register(params):
 
 def measurements_retriever():
     mydb = connect_database()
-    r = {}
+    r = []
     with mydb.cursor() as mycursor:
-        mycursor.execute("SELECT temperature, humidity FROM sensor_data ORDER BY id DESC LIMIT 1;")
+        mycursor.execute("SELECT temperature, humidity, date, device_id FROM sensor_data ORDER BY id DESC;")
         myresult = mycursor.fetchall()
-        for temperature, humidity in myresult:
-            r = {"temperature": temperature, "humidity": humidity}
+        for temperature, humidity, date, device_id in myresult:
+            r.append({"temperature": temperature, "humidity": humidity, "date": date, "device": device_id})
         mydb.commit()
-    return r
+    return {"data": r}
 
