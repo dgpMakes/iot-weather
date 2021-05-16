@@ -6,6 +6,8 @@
   integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/vue"></script>
 <script src="https://unpkg.com/vue-router"></script>
+<script src="./main.vue" type="module"></script>
+
 
 <head>
   <title>
@@ -22,39 +24,8 @@
 
 
 
-    <div id="app" class="col-sm-12">
-      <h1 class="my-3">Measurements</h1>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Time</th>
-            <th scope="col">Device</th>
-            <th scope="col">Temperature</th>
-            <th scope="col">Humidity</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="m in displayedMeasurements">
-            <th scope="row">{{m.device}}</th>
-            <td>{{m.humidity}}</td>
-            <td>{{m.temperature}}</td>
-            <td>{{m.date}}</td>
-          </tr>
-        </tbody>
-      </table>
-      <nav>
-        <p style="display: inline;">Page {{page}} of {{pages.length}}</p>
+    <router-view></router-view>
 
-        <ul class="pagination">
-          <li class="page-item">
-            <button type="button" class="page-link d-inline" v-if="page > 1" @click="page--"> Previous </button>
-          </li>
-          <li class="page-item">
-            <button type="button" @click="page++" v-if="page < pages.length" class="page-link d-inline"> Next </button>
-          </li>
-        </ul>
-      </nav>
-    </div>
 
 
 
