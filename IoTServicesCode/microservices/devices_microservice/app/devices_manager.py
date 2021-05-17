@@ -21,7 +21,7 @@ def device_register(params):
     mydb = connect_database()
     with mydb.cursor() as mycursor:
         sql = "INSERT INTO devices (device_id) VALUES (%s)"
-        val = params["device"]
+        val = params["device_id"]
         device_id = (val,)
 
         try:
