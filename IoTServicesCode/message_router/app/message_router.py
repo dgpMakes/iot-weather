@@ -1,3 +1,4 @@
+import os
 import paho.mqtt.client as paho
 from device_register_interface import *
 from measurement_register_interface import *
@@ -27,7 +28,7 @@ def on_message(client, userdata, message):
 
     if message.topic == TEMP_TOPIC:
         current_temperature = float(message.payload.decode("utf-8"))
-        data = {"temperature": current_temperature, "humidity": current_humidity}
+        data = {"temperature": current_temperature, "humidity": current_humidity, "device_id": }
         submit_data_to_store(data)
         print(data)
     if message.topic == HUMIDITY_TOPIC:
@@ -44,13 +45,19 @@ def on_message(client, userdata, message):
 
 
 if __name__ == "__main__":
-    params = getPreferences("router_preferences.yaml")
+    BROKER_ADDRESS = os.getenv("BROKER_ADDRESS")
+    BROKER_PORT = os.getenv("BROKER_PORT")
+    BROKER_KEEP_ALIVE = os.getenv("BROKER_KEEP_ALIVE")
+    BROKER_USER = os.getenv("BROKER_USER")
+    BROKER_PASSWORD = os.getenv("BROKER_PASSWORD")
+
+
     client = paho.Client()
-    client.username_pw_set(username=params["broker_user"], password=params["broker_pwd"])
+    client.username_pw_set(username=BROKER_USER, password=BROKER_PASSWORD)
     client.on_connect = on_connect
     client.on_message = on_message
 
-    print("connecting to broker ", params["broker_address"])
-    client.connect(params["broker_address"], params["broker_port"], params["broker_keep_alive"])
+    print("connecting to broker ", BROKER_ADDRESS)
+    client.connect(host=BROKER_ADDRESS, port=int(BROKER_PORT), keepalive=int(BROKER_KEEP_ALIVE))
 
     client.loop_forever()

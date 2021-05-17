@@ -1,0 +1,91 @@
+version: '3'
+
+services:
+  message_broker:
+    build: ./message_broker
+    ports:
+      - '1883:1883'
+    volumes:
+      - ./message_broker/app/mosquitto.conf:/mosquitto/config/mosquitto.conf
+  mariaDB:
+    image: mariadb:latest
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=RedDeadRedemption2_dso_l0l0qw4tmn64t
+
+  devices_microservice:
+    build: ./microservices/devices_microservice
+    ports:
+      - '5001:5001'
+    links:
+      - 'mariaDB:mariaDB'
+    environment:
+      - HOST=0.0.0.0
+      - PORT=5001
+      - DB_HOST=mariaDB
+      - DB_USER=iot_user
+      - DB_PASSWORD=Cyberpunk2077_dso_wqff4tg8oxcvx
+      - DB_DATABASE=iot_data
+    depends_on:
+      - mariaDB
+  measurements_microservice:
+    build: ./microservices/measurements_microservice
+    ports:
+      - '5002:5002'
+    links:
+      - 'mariaDB:mariaDB'
+    environment:
+      - HOST=0.0.0.0
+      - PORT=5002
+      - DB_HOST=mariaDB
+      - DB_USER=iot_user
+      - DB_PASSWORD=Cyberpunk2077_dso_wqff4tg8oxcvx
+      - DB_DATABASE=iot_data
+    depends_on:
+      - mariaDB
+  message_router:
+    build: ./message_router
+    links:
+      - 'measurements_microservice:measurements_microservice'
+      - 'devices_microservice:devices_microservice'
+      - 'message_broker:message_broker'
+    environment:
+      - BROKER_ADDRESS=message_broker
+      - BROKER_PORT=1883
+      - BROKER_KEEP_ALIVE=60
+      - BROKER_USER=dso_server
+      - BROKER_PASSWORD=dso_password
+      - DEVICES_MICROSERVICE_ADDRESS=devices_microservice
+      - DEVICES_MICROSERVICE_PORT=5001
+      - MEASUREMENTS_MICROSERVICE_ADDRESS=measurements_microservice
+      - MEASUREMENTS_MICROSERVICE_PORT=5002
+    depends_on:
+      - mariaDB
+      - message_broker
+      - devices_microservice
+      - measurements_microservice
+  api_rest_interface:
+    build: ./api_rest_interfaces
+    ports:
+      - '5000:5000'
+    links:
+      - 'measurements_microservice:measurements_microservice'
+      - 'devices_microservice:devices_microservice'
+    depends_on:
+      - devices_microservice
+      - measurements_microservice
+    environment:
+      - DEVICES_MICROSERVICE_SERVER=devices_microservice
+      - DEVICES_MICROSERVICE_PORT=5001
+      - MEASUREMENTS_MICROSERVICE_SERVER=measurements_microservice
+      - MEASUREMENTS_MICROSERVICE_PORT=5002
+      - PORT=5000
+      - HOST=0.0.0.0
+
+  web_app:
+    build: ./webapp
+    ports:
+      - '80:80'
+    depends_on:
+      - api_rest_interface

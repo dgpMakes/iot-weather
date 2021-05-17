@@ -1,9 +1,13 @@
+import os
+
 from flask import Flask, request
 from flask_cors import CORS
 from measurements_manager import *
 
 app = Flask(__name__)
 CORS(app)
+HOST = os.getenv("HOST")
+PORT = os.getenv("PORT")
 
 
 @app.route('/measurements/register', methods=['POST'])
@@ -18,5 +22,4 @@ def get_measurements():
     return measurements_retriever()
 
 
-params = getPreferences("microservice_conf.yaml")
-app.run(host=params["host"], port=str(params["port"]))
+app.run(host=HOST, port=PORT)

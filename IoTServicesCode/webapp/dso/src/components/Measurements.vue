@@ -65,7 +65,7 @@ export default {
 
   methods: {
     getPosts() {
-      fetch("http://api.uc3m.tk:5000/dso/measurements")
+      fetch("http://localhost:5000/dso/measurements")
         .then((response) => response.json())
         .then((json) => {
           this.posts = json.data;
