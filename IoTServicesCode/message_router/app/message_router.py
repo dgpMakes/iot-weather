@@ -2,7 +2,7 @@ import os
 import paho.mqtt.client as paho
 from device_register_interface import *
 from measurement_register_interface import *
-import load_preferences
+import json
 
 my_json = []
 current_temperature = "0"
@@ -12,8 +12,6 @@ TEMP_TOPIC = "/uc3m/classrooms/leganes/myclass/temperature"
 HUMIDITY_TOPIC = "/uc3m/classrooms/leganes/myclass/humidity"
 DEVICE_INFO_TOPIC = "/uc3m/classrooms/leganes/myclass/device_info"
 
-
-params = load_preferences("conf.yaml")
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -30,21 +28,23 @@ def on_message(client, userdata, message):
     print("Received message =", str(message.payload.decode("utf-8")))
 
     if message.topic == TEMP_TOPIC:
-        current_temperature = float(message.payload.decode("utf-8"))
-        data = {"temperature": current_temperature, "humidity": current_humidity, "device_id": userdata.client_id}
+        payload = json.loads(message.payload.decode("utf-8"))
+        current_temperature = float(payload["data"])
+        device_id = payload["device_id"]
+        data = {"temperature": current_temperature, "humidity": current_humidity, "device_id": device_id}
         submit_data_to_store(data)
-        print(data)
+
     if message.topic == HUMIDITY_TOPIC:
-        current_humidity = float(message.payload.decode("utf-8"))
-        data = {"temperature": current_temperature, "humidity": current_humidity, "device_id": userdata.client_id}
+        payload = json.loads(message.payload.decode("utf-8"))
+        current_humidity = float(payload["data"])
+        device_id = payload["device_id"]
+        data = {"temperature": current_temperature, "humidity": current_humidity, "device_id": device_id}
         submit_data_to_store(data)
-        print(data)
 
     if message.topic == DEVICE_INFO_TOPIC:
         r = message.payload.decode("utf-8")
         data = {"device_id": r}
         submit_device_info_to_store(data)
-        print(data)
 
 
 if __name__ == "__main__":

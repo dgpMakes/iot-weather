@@ -1,6 +1,7 @@
 import mysql.connector
 import os
-
+import sys
+from urllib.parse import unquote
 
 DB_HOST = os.getenv("DB_HOST")
 DB_USER = os.getenv("DB_USER")
@@ -19,25 +20,33 @@ def connect_database ():
 
 
 def measurements_register(params):
+    print("connecting to database", file=sys.stderr)
     mydb = connect_database()
     with mydb.cursor() as mycursor:
-        try:
-            sql = "INSERT INTO sensor_data (temperature, humidity, device_id) VALUES (%s, %s, %s)"
-            val = (params["temperature"], params["humidity"], params["device_id"])
-            mycursor.execute(sql, val)
-            mydb.commit()
-            print(mycursor.rowcount,"record inserted.")
-        except:
-            print("Error inserting the device")
+        sql = "INSERT INTO sensor_data (temperature, humidity, device_id) VALUES (%s, %s, %s)"
+        print("Received info from " + params["device_id"], file=sys.stderr)
+        val = (params["temperature"], params["humidity"], params['device_id'])
+        mycursor.execute(sql, val)
+        mydb.commit()
+        print("record inserted.", file=sys.stderr)
+        mydb.close()
 
-def measurements_retriever():
+
+def measurements_retriever(device=None):
     mydb = connect_database()
     r = []
+    print("device requested -> " + device, file=sys.stderr)
     with mydb.cursor() as mycursor:
-        mycursor.execute("SELECT temperature, humidity, date, device_id FROM sensor_data ORDER BY date DESC;")
+        if device == None:
+            mycursor.execute("SELECT temperature, humidity, date, device_id FROM sensor_data ORDER BY date DESC;")
+        else:
+            mycursor.execute("SELECT temperature, humidity, date, device_id FROM sensor_data WHERE device_id='"
+                             + unquote(device) + "' ORDER BY date DESC;")
+
         myresult = mycursor.fetchall()
         for temperature, humidity, date, device_id in myresult:
             r.append({"temperature": temperature, "humidity": humidity, "date": date, "device_id": device_id})
         mydb.commit()
+        mydb.close()
     return {"data": r}
 

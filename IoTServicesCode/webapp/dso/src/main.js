@@ -7,12 +7,12 @@ Vue.config.productionTip = false
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 import Measurements from "./components/Measurements.vue";
-import Device from "./components/Device.vue";
+import Devices from "./components/Devices.vue";
 
 
 const routes = [
-  { path: "/", component: Measurements },
-  { path: "/device/:id", component: Device },
+  { path: "/", component: Devices },
+  { path: "/device/:id", component: Measurements },
 ];
 
 const router = new VueRouter({

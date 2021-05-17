@@ -3,7 +3,6 @@ FROM python:3.7.3
 COPY /app /etc/usr/src
 WORKDIR /etc/usr/src
 
-RUN pip install mysql-connector-python Flask Flask-Cors PyYAML
+RUN pip install urllib3 mysql-connector-python Flask Flask-Cors PyYAML
 
-ENTRYPOINT ["python"]
-CMD ["measurements_manager_api.py"]
+CMD ["python", "-u", "measurements_manager_api.py"]

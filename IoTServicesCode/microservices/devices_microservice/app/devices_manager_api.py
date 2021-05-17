@@ -21,4 +21,9 @@ def retrieve_devices():
     return devices_retriever()
 
 
-app.run(host=HOST, port=PORT)
+@app.route('/devices/location/', methods=['PUT'])
+def update_device_location():
+    return register_location()
+
+
+app.run(host=HOST, port=PORT, debug=True)

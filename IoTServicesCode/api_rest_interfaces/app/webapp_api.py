@@ -29,4 +29,11 @@ def get_device_list():
     return response.content
 
 
+@app.route('/dso/devices/<device>/')
+def get_device_data(device):
+    response = requests.get(PROTOCOL + MEASUREMENTS_MICROSERVICE_SERVER + ":" +
+                            MEASUREMENTS_MICROSERVICE_PORT + "/measurements/retrieve/" + device + "/")
+    return response.content
+
+
 app.run(host=HOST, port=PORT, debug=True)

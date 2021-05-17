@@ -5,5 +5,4 @@ WORKDIR /etc/usr/src
 
 RUN pip install requests paho-mqtt
 
-ENTRYPOINT ["python"]
-CMD ["message_router.py"]
+CMD ["python", "-u", "message_router.py"]

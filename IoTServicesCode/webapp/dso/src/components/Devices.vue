@@ -1,25 +1,25 @@
 <template>
   <div>
-    <h1 class="my-3">
-      Device <strong>{{ deviceName }}</strong>
-    </h1>
+    <h1 class="text-center my-3">Dispositivos</h1>
     <table class="table">
       <thead>
         <tr>
+          <th scope="col">Device ID</th>
+          <th scope="col">Status</th>
+          <th scope="col">Location</th>
           <th scope="col">Date</th>
-          <th scope="col">Temperature</th>
-          <th scope="col">Humidity</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(m, idx) in displayedDevices" :key="idx">
+        <tr v-for="(m, idx) in displayedMeasurements" :key="idx">
           <th scope="row">
             <router-link :to="'/device/' + m.device_id">
-              {{ m.date }}
+              {{ m.device_id }}
             </router-link>
           </th>
-          <td>{{ m.temperature }}</td>
-          <td>{{ m.humidity }}</td>
+          <td>{{ m.status }}</td>
+          <td>{{ m.location }}</td>
+          <td>{{ m.date }}</td>
         </tr>
       </tbody>
     </table>
@@ -54,12 +54,9 @@
 
 
 
-
-
-
 <script>
 export default {
-  name: "Measurements",
+  name: "Devices",
   data() {
     return {
       posts: [""],
@@ -71,7 +68,7 @@ export default {
 
   methods: {
     getPosts() {
-      fetch("http://localhost:5000/dso/devices/" + this.$route.params.id + "/")
+      fetch("http://localhost:5000/dso/devices/")
         .then((response) => response.json())
         .then((json) => {
           this.posts = json.data;
@@ -92,9 +89,10 @@ export default {
     },
   },
   computed: {
-    displayedDevices() {
+    displayedMeasurements() {
       return this.paginate(this.posts);
     },
+
     deviceName() {
       return this.$route.params.id;
     },
@@ -114,3 +112,6 @@ export default {
   },
 };
 </script>
+
+<style>
+</style>

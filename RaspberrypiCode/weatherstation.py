@@ -1,5 +1,4 @@
-from random import random
-
+import random
 import paho.mqtt.client as mqtt
 import adafruit_dht
 import RPi.GPIO as GPIO

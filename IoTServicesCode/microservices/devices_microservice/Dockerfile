@@ -5,5 +5,4 @@ WORKDIR /etc/usr/src
 
 RUN pip install mysql-connector-python Flask Flask-Cors PyYAML
 
-ENTRYPOINT ["python"]
-CMD ["devices_manager_api.py"]
+CMD ["python", "-u", "devices_manager_api.py"]
