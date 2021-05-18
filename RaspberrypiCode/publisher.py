@@ -8,6 +8,7 @@ import utils.load_preferences
 TEMP_TOPIC = "/uc3m/classrooms/leganes/myclass/temperature"
 HUMIDITY_TOPIC = "/uc3m/classrooms/leganes/myclass/humidity"
 DEVICE_INFO_TOPIC = "/uc3m/classrooms/leganes/myclass/device_info"
+LOCATION_TOPIC = "/uc3m/classrooms/leganes/myclass/location"
 
 # Get parameters from config file
 params = getPreferences("conf.yaml")
@@ -32,7 +33,8 @@ def make_connection():
     client.username_pw_set(params["broker_user"], params["broker_pwd"])
     client.on_connect = on_connect
 
-    client.will_set(DEVICE_INFO_TOPIC, '{"status": "off"}')
+    will = json.dumps({"device_id": raspberry_id, "event": "inactive"})
+    client.will_set(DEVICE_INFO_TOPIC, will)
     client.connect(params["broker_address"], params["broker_port"], params["broker_keep_alive"])
     print("Connection has been made.")
 
@@ -50,5 +52,18 @@ def send_humidity(humidity):
 
 
 def send_id():
-    client.publish(DEVICE_INFO_TOPIC, payload=raspberry_id, qos=0, retain=False)
+    pl = json.dumps({"device_id": raspberry_id, "event": "register"})
+    client.publish(DEVICE_INFO_TOPIC, payload=pl, qos=0, retain=False)
+    time.sleep(1)
+
+
+def send_active():
+    pl = json.dumps({"device_id": raspberry_id, "event": "active"})
+    client.publish(DEVICE_INFO_TOPIC, payload=pl, qos=0, retain=False)
+    time.sleep(1)
+
+
+def send_location(location):
+    pl = json.dumps({"device_id": raspberry_id, "location": location})
+    client.publish(LOCATION_TOPIC, payload=pl, qos=0, retain=False)
     time.sleep(1)

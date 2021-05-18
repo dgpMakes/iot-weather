@@ -24,7 +24,26 @@ def device_register(params):
         sql = "INSERT INTO devices (device_id) VALUES (%s)"
         val = params["device_id"]
         device_id = (val,)
-        mycursor.execute(sql, device_id)
+        try:
+            mycursor.execute(sql, device_id)
+        except mysql.connector.Error as error:
+            print("Database error: " + str(error), file=sys.stderr)
+        mydb.commit()
+        mydb.close()
+        return "record inserted"
+
+
+def device_status_update(params):
+    mydb = connect_database()
+    with mydb.cursor() as mycursor:
+        if params["event"] == "active":
+            query = "UPDATE devices SET STATUS = " + "'active'" + " WHERE DEVICE_ID = '" + params["device_id"] + "';"
+            mycursor.execute(query)
+        elif params["event"] == "inactive":
+            query = "UPDATE devices SET STATUS = " + "'inactive'" + " WHERE DEVICE_ID = '" + params["device_id"] + "';"
+            mycursor.execute(query)
+
+        print(query, file=sys.stderr)
         mydb.commit()
         print(mycursor.rowcount, "record inserted.", file=sys.stderr)
         mydb.close()
@@ -47,9 +66,10 @@ def devices_retriever():
 def register_location(params):
     mydb = connect_database()
     with mydb.cursor() as mycursor:
-        sql = "UPDATE devices set location = " + params["location"] \
-              + "  WHERE device_id = " + params["device_id"]
+        sql = "UPDATE devices set location = '" + params["location"] \
+              + "'  WHERE device_id = '" + params["device_id"] + "';"
+        print(sql, file=sys.stderr)
         mycursor.execute(sql)
         mydb.commit()
-        print(mycursor.rowcount, "record inserted.", file=sys.stderr)
+        print("record inserted.", file=sys.stderr)
         mydb.close()

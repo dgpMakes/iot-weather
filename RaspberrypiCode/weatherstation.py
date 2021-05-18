@@ -50,23 +50,25 @@ def fakeSensors():
         except RuntimeError:
             pass
 
-#def humiditySensor():
-#    while True:
-#        try:
-#            measured_humidity = DHT_SENSOR.humidity
-#            print("Humidity: " + str(measured_humidity) + "%")
-#            send_humidity(measured_humidity)
-#
-#        except RuntimeError:
-#            pass
+
+def sendLocation():
+    while True:
+        location = "spain"
+        print("gps location -> " + location)
+        send_location(location)
+        time.sleep(10)
+
 
 
 def initializeWeatherSensor():
     # Make connection with the mqtt broker
     make_connection()
 
-    # Register device in database (necessary before sending any sensor data)
+    # Register device in database (in case the device is not registered)
     send_id()
+
+    # Set the device to active mode
+    send_active()
 
 
 if __name__ == "__main__":
@@ -74,6 +76,11 @@ if __name__ == "__main__":
     initializeWeatherSensor()
 
     # Initialize automatic sensor measurer
-    sensors = threading.Thread(target=fakeSensors())
+    print("Starting threads")
+    sensors = threading.Thread(target=fakeSensors)
+    location = threading.Thread(target=sendLocation)
+    print("Starting location")
+    location.start()
+    print("Starting sensors")
     sensors.start()
 

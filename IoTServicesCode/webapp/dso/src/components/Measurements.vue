@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 class="my-3">
-      Device <strong>{{ deviceName }}</strong>
+    <h1 class="my-3 center">
+      <strong>{{ deviceName }}</strong>
     </h1>
     <table class="table">
       <thead>

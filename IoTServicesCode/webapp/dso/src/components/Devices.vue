@@ -7,7 +7,7 @@
           <th scope="col">Device ID</th>
           <th scope="col">Status</th>
           <th scope="col">Location</th>
-          <th scope="col">Date</th>
+          <th scope="col">Last activity date</th>
         </tr>
       </thead>
       <tbody>
@@ -91,10 +91,6 @@ export default {
   computed: {
     displayedMeasurements() {
       return this.paginate(this.posts);
-    },
-
-    deviceName() {
-      return this.$route.params.id;
     },
   },
   watch: {

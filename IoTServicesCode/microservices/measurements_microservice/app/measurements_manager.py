@@ -35,7 +35,7 @@ def measurements_register(params):
 def measurements_retriever(device=None):
     mydb = connect_database()
     r = []
-    print("device requested -> " + device, file=sys.stderr)
+    print("device requested -> " + str(device), file=sys.stderr)
     with mydb.cursor() as mycursor:
         if device == None:
             mycursor.execute("SELECT temperature, humidity, date, device_id FROM sensor_data ORDER BY date DESC;")

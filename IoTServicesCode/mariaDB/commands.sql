@@ -10,7 +10,7 @@ CREATE TABLE devices (
     device_id varchar(50) NOT NULL,
     status varchar(50) NOT NULL default 'active',
     location varchar(50),
-    date timestamp NOT NULL default current_timestamp,
+    date timestamp NOT NULL on update current_timestamp,
     PRIMARY KEY (device_id)
 );
 

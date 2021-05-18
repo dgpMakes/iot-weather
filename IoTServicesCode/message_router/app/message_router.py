@@ -11,6 +11,7 @@ current_humidity = "0"
 TEMP_TOPIC = "/uc3m/classrooms/leganes/myclass/temperature"
 HUMIDITY_TOPIC = "/uc3m/classrooms/leganes/myclass/humidity"
 DEVICE_INFO_TOPIC = "/uc3m/classrooms/leganes/myclass/device_info"
+LOCATION_TOPIC = "/uc3m/classrooms/leganes/myclass/location"
 
 
 def on_connect(client, userdata, flags, rc):
@@ -19,6 +20,7 @@ def on_connect(client, userdata, flags, rc):
         client.subscribe(TEMP_TOPIC)
         client.subscribe(HUMIDITY_TOPIC)
         client.subscribe(DEVICE_INFO_TOPIC)
+        client.subscribe(LOCATION_TOPIC)
     else:
         print("Error de conexión: ", rc)
 
@@ -42,10 +44,16 @@ def on_message(client, userdata, message):
         submit_data_to_store(data)
 
     if message.topic == DEVICE_INFO_TOPIC:
-        r = message.payload.decode("utf-8")
-        data = {"device_id": r}
-        submit_device_info_to_store(data)
+        payload = json.loads(message.payload.decode("utf-8"))
+        if payload["event"] == "register":
+            submit_device_info_to_store(payload)
+        elif payload["event"] == "active" or payload["event"] == "inactive":
+            submit_device_status_to_store(payload)
 
+    if message.topic == LOCATION_TOPIC:
+        payload = json.loads(message.payload.decode("utf-8"))
+        print("Received location topic")
+        submit_location_to_store(payload)
 
 if __name__ == "__main__":
     BROKER_ADDRESS = os.getenv("BROKER_ADDRESS")
