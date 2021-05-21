@@ -10,6 +10,7 @@ from utils.load_preferences import getPreferences
 from board import *
 
 
+
 SENSOR_PIN = D17
 DHT_SENSOR = adafruit_dht.DHT11(SENSOR_PIN, use_pulseio=False)
 
@@ -17,17 +18,28 @@ client = mqtt.Client()
 
 params = getPreferences("conf.yaml")
 
+# Initalize global variables to store last temperature
+last_measured_temp = None
+last_measured_humidity = None
+
 
 def temperatureAndHumiditySensor():
     while True:
         try:
+            global last_measured_temp
+            global last_measured_humidity
+
             measured_temp = DHT_SENSOR.temperature
-            print("Temperature: " + str(measured_temp) + "ºC ")
-            send_temperature(measured_temp)
+            if measured_temp is not last_measured_temp or last_measured_temp is None:
+                print("Temperature: " + str(measured_temp) + "ºC ")
+                send_temperature(measured_temp)
+                last_measured_temp = measured_temp
 
             measured_humidity = DHT_SENSOR.humidity
-            print("Humidity: " + str(measured_humidity) + "%")
-            send_humidity(measured_humidity)
+            if measured_humidity is not last_measured_humidity or last_measured_humidity is None:
+                print("Humidity: " + str(measured_humidity) + "%")
+                send_humidity(measured_humidity)
+                last_measured_humidity = measured_humidity
 
             time.sleep(10)
         except RuntimeError:
@@ -51,6 +63,7 @@ def initializeWeatherSensor():
 
     # Set the device to active mode
     send_active()
+
 
 
 if __name__ == "__main__":
