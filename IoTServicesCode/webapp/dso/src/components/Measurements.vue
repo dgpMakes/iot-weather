@@ -64,6 +64,7 @@ export default {
       page: 1,
       perPage: 9,
       pages: [],
+      timer: ''
     };
   },
 
@@ -77,6 +78,7 @@ export default {
     },
     setPages() {
       let numberOfPages = Math.ceil(this.posts.length / this.perPage);
+      this.pages = []
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }
@@ -104,6 +106,7 @@ export default {
   },
   created() {
     this.getPosts();
+    this.timer = setInterval(this.getPosts, 2000);
   },
   filters: {
     trimWords(value) {

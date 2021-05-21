@@ -63,6 +63,7 @@ export default {
       page: 1,
       perPage: 9,
       pages: [],
+      timer: ''
     };
   },
 
@@ -100,6 +101,7 @@ export default {
   },
   created() {
     this.getPosts();
+    this.timer = setInterval(this.getPosts, 2000);
   },
   filters: {
     trimWords(value) {

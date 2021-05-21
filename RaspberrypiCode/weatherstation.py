@@ -18,7 +18,6 @@ client = mqtt.Client()
 params = getPreferences("conf.yaml")
 
 
-
 def temperatureAndHumiditySensor():
     while True:
         try:
@@ -35,29 +34,12 @@ def temperatureAndHumiditySensor():
             pass
 
 
-def fakeSensors():
-    while True:
-        try:
-            measured_temp = random.randrange(15, 40)
-            print("Temperature: " + str(measured_temp) + "ºC ")
-            send_temperature(measured_temp)
-
-            measured_humidity = random.randrange(15, 40)
-            print("Humidity: " + str(measured_humidity) + "%")
-            send_humidity(measured_humidity)
-
-            time.sleep(10)
-        except RuntimeError:
-            pass
-
-
 def sendLocation():
     while True:
         location = "spain"
         print("gps location -> " + location)
         send_location(location)
         time.sleep(10)
-
 
 
 def initializeWeatherSensor():
@@ -77,7 +59,7 @@ if __name__ == "__main__":
 
     # Initialize automatic sensor measurer
     print("Starting threads")
-    sensors = threading.Thread(target=fakeSensors)
+    sensors = threading.Thread(target=temperatureAndHumiditySensor)
     location = threading.Thread(target=sendLocation)
     print("Starting location")
     location.start()
