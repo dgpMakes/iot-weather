@@ -77,6 +77,7 @@ export default {
     },
     setPages() {
       let numberOfPages = Math.ceil(this.posts.length / this.perPage);
+      this.pages = [];
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }
