@@ -26,4 +26,4 @@ def get_measurements():
 def get_measurement_by_device(device):
     return measurements_retriever(device)
 
-app.run(host=HOST, port=PORT, debug=True)
+app.run(host=HOST, port=PORT, debug=False)

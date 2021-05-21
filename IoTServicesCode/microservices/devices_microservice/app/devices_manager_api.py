@@ -35,4 +35,4 @@ def update_device_location():
     return {"result": "location updated"}, 201
 
 
-app.run(host=HOST, port=PORT, debug=True)
+app.run(host=HOST, port=PORT, debug=False)

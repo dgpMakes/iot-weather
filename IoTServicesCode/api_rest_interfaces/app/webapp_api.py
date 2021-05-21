@@ -36,4 +36,4 @@ def get_device_data(device):
     return response.content
 
 
-app.run(host=HOST, port=PORT, debug=True)
+app.run(host=HOST, port=PORT, debug=False)
