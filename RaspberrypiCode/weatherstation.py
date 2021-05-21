@@ -30,13 +30,15 @@ def temperatureAndHumiditySensor():
             global last_measured_humidity
 
             measured_temp = DHT_SENSOR.temperature
-            if measured_temp is not last_measured_temp or last_measured_temp is None:
+            if measured_temp != last_measured_temp \
+                    or (last_measured_temp is None and measured_temp is not None):
                 print("Temperature: " + str(measured_temp) + "ºC ")
                 send_temperature(measured_temp)
                 last_measured_temp = measured_temp
 
             measured_humidity = DHT_SENSOR.humidity
-            if measured_humidity is not last_measured_humidity or last_measured_humidity is None:
+            if measured_humidity != last_measured_humidity \
+                    or (last_measured_humidity is None and measured_humidity is not None):
                 print("Humidity: " + str(measured_humidity) + "%")
                 send_humidity(measured_humidity)
                 last_measured_humidity = measured_humidity
