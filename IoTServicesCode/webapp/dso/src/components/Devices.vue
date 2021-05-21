@@ -68,7 +68,7 @@ export default {
 
   methods: {
     getPosts() {
-      fetch("http://weatherstation:5000/dso/devices/")
+      fetch("http://weatherstation.tk:5000/dso/devices/")
         .then((response) => response.json())
         .then((json) => {
           this.posts = json.data;

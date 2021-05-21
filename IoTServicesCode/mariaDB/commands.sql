@@ -1,4 +1,4 @@
-drop database iot_data;
+drop database if exists iot_data;
 create database iot_data;
 
 grant all privileges on iot_data.* TO 'iot_user'@'%' identified by 'Cyberpunk2077_dso_wqff4tg8oxcvx';
