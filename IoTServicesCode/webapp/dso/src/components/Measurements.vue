@@ -14,9 +14,7 @@
       <tbody>
         <tr v-for="(m, idx) in displayedDevices" :key="idx">
           <th scope="row">
-            <router-link :to="'/device/' + m.device_id">
               {{ m.date }}
-            </router-link>
           </th>
           <td>{{ m.temperature }}</td>
           <td>{{ m.humidity }}</td>
