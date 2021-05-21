@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-center my-3">Dispositivos</h1>
+    <h1 class="text-center my-3">Devices</h1>
     <table class="table">
       <thead>
         <tr>
