@@ -1,4 +1,4 @@
-broker_address: "10.6.0.2"
+broker_address: "weatherstation.tk"
 broker_port: 1883
 broker_keep_alive: 60
 broker_user: "dso_server"
