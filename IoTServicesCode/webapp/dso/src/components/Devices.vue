@@ -18,7 +18,15 @@
             </router-link>
           </th>
           <td>{{ m.status }}</td>
-          <td>{{ m.location }}</td>
+
+          <td>
+            <a
+              target="_blank"
+              :href="'https://maps.google.com/?q=' + m.location"
+            >
+              {{ m.location }}
+            </a>
+          </td>
           <td>{{ m.date }}</td>
         </tr>
       </tbody>
@@ -63,7 +71,7 @@ export default {
       page: 1,
       perPage: 9,
       pages: [],
-      timer: ''
+      timer: "",
     };
   },
 

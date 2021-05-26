@@ -9,14 +9,15 @@ import time
 import string
 import pynmea2
 
+from RPLCD import CharLCD
 
 from publisher import *
 from utils.load_preferences import getPreferences
 from board import *
 
 
-
-SENSOR_PIN = D4
+GPIO.setmode(GPIO.BOARD)
+SENSOR_PIN = 7 #D4
 DHT_SENSOR = adafruit_dht.DHT11(SENSOR_PIN, use_pulseio=False)
 
 client = mqtt.Client()
@@ -26,6 +27,15 @@ params = getPreferences("conf.yaml")
 # Initalize global variables to store last temperature
 last_measured_temp = None
 last_measured_humidity = None
+
+# To use the LED screen
+
+LCD_RS = 22
+LCD_E  = 18
+LCD_D4 = 16
+LCD_D5 = 11
+LCD_D6 = 12
+LCD_D7 = 15
 
 
 def temperatureAndHumiditySensor():
@@ -83,10 +93,8 @@ def initializeWeatherSensor():
     # Set the device to active mode
     send_active()
 
-
-
 if __name__ == "__main__":
-    # Make mqtt connection and register device in database
+    # Make mqtt connection and register device in datab
     initializeWeatherSensor()
 
     # Initialize automatic sensor measurer
@@ -96,10 +104,12 @@ if __name__ == "__main__":
     print("Starting location")
     location.start()
     print("Starting sensors")
+
+    lcd = CharLCD(cols=16, rows=2, pin_rs=22, pin_e=18, pins_data=[16, 11, 12, 15])
+    lcd.write_string(u'Hello world!')
+
     sensors.start()
 
-#
-#
-#
-#
-#
+
+
+

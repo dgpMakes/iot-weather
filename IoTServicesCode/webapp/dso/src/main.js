@@ -2,6 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import VCalendar from 'v-calendar';
+
+
+// Register the calendar system
+Vue.use(VCalendar)
+
 Vue.config.productionTip = false
 
 import VueRouter from "vue-router";
