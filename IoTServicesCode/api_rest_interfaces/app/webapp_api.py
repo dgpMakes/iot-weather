@@ -15,24 +15,27 @@ PORT = os.getenv("PORT")
 HOST = os.getenv("HOST")
 
 
-@app.route('/dso/measurements/')
+@app.route('/dso/measurements')
 def get_sensor_data():
     response = requests.get(PROTOCOL + MEASUREMENTS_MICROSERVICE_SERVER + ":" +
-                            MEASUREMENTS_MICROSERVICE_PORT + "/measurements/retrieve/")
+                            MEASUREMENTS_MICROSERVICE_PORT + "/measurements/retrieve")
     return response.content
 
 
-@app.route('/dso/devices/')
+@app.route('/dso/devices')
 def get_device_list():
     response = requests.get(PROTOCOL + DEVICES_MICROSERVICE_SERVER + ":" +
-                            DEVICES_MICROSERVICE_PORT + "/devices/retrieve/")
+                            DEVICES_MICROSERVICE_PORT + "/devices/retrieve")
     return response.content
 
 
-@app.route('/dso/devices/<device>/')
+@app.route('/dso/devices/<device>')
 def get_device_data(device):
+    params = {"start": "1-1-2000",
+              "end": "1-1-2021"}
     response = requests.get(PROTOCOL + MEASUREMENTS_MICROSERVICE_SERVER + ":" +
-                            MEASUREMENTS_MICROSERVICE_PORT + "/measurements/retrieve/" + device + "/")
+                            MEASUREMENTS_MICROSERVICE_PORT + "/measurements/retrieve/" + device,
+                            params=params)
     return response.content
 
 

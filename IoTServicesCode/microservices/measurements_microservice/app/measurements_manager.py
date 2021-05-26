@@ -32,7 +32,7 @@ def measurements_register(params):
         mydb.close()
 
 
-def measurements_retriever(device=None):
+def measurements_retriever(device=None, start=None, end=None):
     mydb = connect_database()
     r = []
     print("device requested -> " + str(device), file=sys.stderr)

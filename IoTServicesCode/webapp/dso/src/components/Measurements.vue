@@ -70,7 +70,8 @@ export default {
 
   methods: {
     getPosts() {
-      fetch("http://weatherstation.tk:5000/dso/devices/" + this.$route.params.id + "/")
+      fetch("http://weatherstation.tk:5000/dso/devices/" +
+          this.$route.params.id + '?start="1-1-2000"&end="1-1-2010"')
         .then((response) => response.json())
         .then((json) => {
           this.posts = json.data;

@@ -4,6 +4,11 @@ import adafruit_dht
 import RPi.GPIO as GPIO
 import threading
 import uuid
+import serial
+import time
+import string
+import pynmea2
+
 
 from publisher import *
 from utils.load_preferences import getPreferences
@@ -11,7 +16,7 @@ from board import *
 
 
 
-SENSOR_PIN = D17
+SENSOR_PIN = D4
 DHT_SENSOR = adafruit_dht.DHT11(SENSOR_PIN, use_pulseio=False)
 
 client = mqtt.Client()
@@ -50,10 +55,22 @@ def temperatureAndHumiditySensor():
 
 def sendLocation():
     while True:
-        location = "spain"
-        print("gps location -> " + location)
-        send_location(location)
-        time.sleep(10)
+        port = "/dev/ttyAMA0"
+        ser = serial.Serial(port, baudrate=9600, timeout=0.5)
+        dataout = pynmea2.NMEAStreamReader()
+        try:
+            newdata = ser.readline().decode("utf-8")
+        except UnicodeDecodeError:
+            continue
+
+        if newdata[0:6] == "$GPRMC":
+            newmsg = pynmea2.parse(newdata)
+            lat = newmsg.latitude
+            lng = newmsg.longitude
+            location = str(lat) + ", " + str(lng)
+            print("gps location -> " + location)
+            send_location(location)
+            time.sleep(10)
 
 
 def initializeWeatherSensor():
@@ -81,3 +98,8 @@ if __name__ == "__main__":
     print("Starting sensors")
     sensors.start()
 
+#
+#
+#
+#
+#
