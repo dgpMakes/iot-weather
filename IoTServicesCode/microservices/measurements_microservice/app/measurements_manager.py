@@ -9,7 +9,7 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_DATABASE = os.getenv("DB_DATABASE")
 
 
-def connect_database ():
+def connect_database():
     mydb = mysql.connector.connect(
         host=DB_HOST,
         user=DB_USER,
@@ -39,6 +39,14 @@ def measurements_retriever(device=None, start=None, end=None):
     with mydb.cursor() as mycursor:
         if device == None:
             mycursor.execute("SELECT temperature, humidity, date, device_id FROM sensor_data ORDER BY date DESC;")
+        elif device is not None and start is not None and end is not None:
+            query = ("SELECT temperature, humidity, DATE_FORMAT(date, '%Y-%m-%dT%T.493Z') as date, device_id" +
+                     " FROM sensor_data " +
+                     "WHERE date BETWEEN STR_TO_DATE({start},'%Y-%m-%dT%TZ') AND STR_TO_DATE({end},'%Y-%m-%dT%TZ')" +
+                     " ORDER BY date DESC;").format(start=start, end=end)
+            mycursor.execute(query)
+
+            print(query)
         else:
             mycursor.execute("SELECT temperature, humidity, date, device_id FROM sensor_data WHERE device_id='"
                              + unquote(device) + "' ORDER BY date DESC;")
@@ -49,4 +57,3 @@ def measurements_retriever(device=None, start=None, end=None):
         mydb.commit()
         mydb.close()
     return {"data": r}
-

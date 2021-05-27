@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 import requests
 
@@ -31,8 +31,10 @@ def get_device_list():
 
 @app.route('/dso/devices/<device>')
 def get_device_data(device):
-    params = {"start": "1-1-2000",
-              "end": "1-1-2021"}
+    start = request.args.get("start", None)
+    end = request.args.get("end", None)
+    params = {"start": start,
+              "end": end}
     response = requests.get(PROTOCOL + MEASUREMENTS_MICROSERVICE_SERVER + ":" +
                             MEASUREMENTS_MICROSERVICE_PORT + "/measurements/retrieve/" + device,
                             params=params)

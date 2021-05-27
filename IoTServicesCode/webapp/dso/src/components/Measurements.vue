@@ -82,11 +82,9 @@ export default {
       perPage: 9,
       pages: [],
       timer: "",
-      date1: new Date("DD-MM-YYYY hh:mm:ss"),
-      date2: new Date("DD-MM-YYYY hh:mm:ss"),
       range: {
-        start: new Date(2020, 0, 6),
-        end: new Date(2020, 0, 23),
+        start: new Date(),
+        end: new Date(),
       },
       masks: {
         input: "DD-MM-YYYY hh:mm",
@@ -100,9 +98,9 @@ export default {
         "http://weatherstation.tk:5000/dso/devices/" +
           this.$route.params.id +
           "?start=" +
-          this.range.start +
+          this.range.start.toISOString() +
           "&end=" +
-          this.range.end
+          this.range.end.toISOString()
       )
         .then((response) => response.json())
         .then((json) => {

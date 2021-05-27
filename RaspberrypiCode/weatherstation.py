@@ -16,8 +16,8 @@ from utils.load_preferences import getPreferences
 from board import *
 
 
-GPIO.setmode(GPIO.BOARD)
-SENSOR_PIN = 7 #D4
+#GPIO.setmode(GPIO.BCM)
+SENSOR_PIN = D4
 DHT_SENSOR = adafruit_dht.DHT11(SENSOR_PIN, use_pulseio=False)
 
 client = mqtt.Client()
@@ -30,12 +30,27 @@ last_measured_humidity = None
 
 # To use the LED screen
 
-LCD_RS = 22
-LCD_E  = 18
-LCD_D4 = 16
-LCD_D5 = 11
-LCD_D6 = 12
-LCD_D7 = 15
+LCD_RS = 25
+LCD_E  = 24
+LCD_D4 = 23
+LCD_D5 = 17
+LCD_D6 = 18
+LCD_D7 = 22
+
+temperatureToReturn = 0
+humidityToReturn = 0
+
+#button setup
+mode = 0
+def changeDisplayMode():
+    if mode == 0:
+        mode = 1
+    if mode == 1:
+        mode = 0
+
+GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.add_event_detect(16,GPIO.RISING,callback=changeDisplayMode) # Setup event on pin 16 rising edge
+
 
 
 def temperatureAndHumiditySensor():
@@ -48,6 +63,7 @@ def temperatureAndHumiditySensor():
             if measured_temp != last_measured_temp \
                     or (last_measured_temp is None and measured_temp is not None):
                 print("Temperature: " + str(measured_temp) + "ºC ")
+                temperatureToReturn = measured_temp
                 send_temperature(measured_temp)
                 last_measured_temp = measured_temp
 
@@ -55,6 +71,7 @@ def temperatureAndHumiditySensor():
             if measured_humidity != last_measured_humidity \
                     or (last_measured_humidity is None and measured_humidity is not None):
                 print("Humidity: " + str(measured_humidity) + "%")
+                humidityToReturn = measured_humidity
                 send_humidity(measured_humidity)
                 last_measured_humidity = measured_humidity
 
@@ -104,11 +121,33 @@ if __name__ == "__main__":
     print("Starting location")
     location.start()
     print("Starting sensors")
-
-    lcd = CharLCD(cols=16, rows=2, pin_rs=22, pin_e=18, pins_data=[16, 11, 12, 15])
-    lcd.write_string(u'Hello world!')
-
     sensors.start()
+
+    lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E, pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7],
+                  numbering_mode=GPIO.BCM)
+
+    while True:
+        print("Display funcionando!")
+
+        if mode == 0:
+
+            if temperatureToReturn >=5 or temperatureToReturn <= 50:
+                lcd.write_string(u'Temperature: ' + str(temperatureToReturn) + 'ºC ')
+            else:
+                lcd.write_string(u'Temperature: ERROR')
+
+        if mode == 1:
+            if humidityToReturn >= 0 or humidityToReturn <= 100:
+                lcd.write_string(u'Humidity: ' + str(humidityToReturn) + '% ')
+            else:
+                lcd.write_string(u'Humidity: ERROR')
+
+        time.sleep(5)
+        lcd.clear()
+
+
+
+
 
 
 

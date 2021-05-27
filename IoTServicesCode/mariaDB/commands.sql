@@ -10,7 +10,7 @@ CREATE TABLE devices (
     device_id varchar(50) NOT NULL,
     status varchar(50) NOT NULL default 'active',
     location varchar(50),
-    date timestamp NOT NULL on update current_timestamp,
+    date datetime NOT NULL on update now(),
     PRIMARY KEY (device_id)
 );
 
@@ -23,8 +23,3 @@ CREATE TABLE sensor_data (
     FOREIGN KEY (device_id) references devices(device_id),
     PRIMARY key (id)
 );
-
-
-
-
-
