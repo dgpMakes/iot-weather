@@ -88,10 +88,12 @@ def sendLocation():
             lat = newmsg.latitude
             lng = newmsg.longitude
 
+            '''
             while lat != float or (lat < 30 and lat > 50):
                 lat = newmsg.latitude
             while lng != float or (lng < -20 and lng > 20):
-                lng = newmsg.latitude
+                lng = newmsg.latitude'''
+
             location = str(lat) + ", " + str(lng)
             print("gps location -> " + location)
             send_location(location)

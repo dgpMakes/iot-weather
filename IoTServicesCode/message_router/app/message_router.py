@@ -5,8 +5,8 @@ from measurement_register_interface import *
 import json
 
 my_json = []
-current_temperature = "0"
-current_humidity = "0"
+current_temperature = "20"
+current_humidity = "40"
 
 TEMP_TOPIC = "/uc3m/classrooms/leganes/myclass/temperature"
 HUMIDITY_TOPIC = "/uc3m/classrooms/leganes/myclass/humidity"
