@@ -73,6 +73,7 @@
 
 
 <script>
+var dateFormat = require("dateformat");
 export default {
   name: "Measurements",
   data() {
@@ -98,9 +99,9 @@ export default {
         "http://weatherstation.tk:5000/dso/devices/" +
           this.$route.params.id +
           "?start=" +
-          this.range.start.toISOString() +
+          dateFormat(this.range.start, "dd-mm-yyyy HH:MM") +
           "&end=" +
-          this.range.end.toISOString()
+          dateFormat(this.range.end, "dd-mm-yyyy HH:MM")
       )
         .then((response) => response.json())
         .then((json) => {
