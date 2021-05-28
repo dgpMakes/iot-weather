@@ -31,26 +31,20 @@ last_measured_humidity = None
 # To use the LED screen
 
 LCD_RS = 25
-LCD_E  = 24
+LCD_E = 24
 LCD_D4 = 23
 LCD_D5 = 17
 LCD_D6 = 18
 LCD_D7 = 22
 
-temperatureToReturn = 0
-humidityToReturn = 0
-
 #button setup
 mode = 0
-def changeDisplayMode():
-    if mode == 0:
-        mode = 1
-    if mode == 1:
-        mode = 0
 
-GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.add_event_detect(16,GPIO.RISING,callback=changeDisplayMode) # Setup event on pin 16 rising edge
 
+def changeDisplayMode(_):
+    print("update mode")
+    global mode
+    mode = 1 if mode == 0 else 0
 
 
 def temperatureAndHumiditySensor():
@@ -63,7 +57,6 @@ def temperatureAndHumiditySensor():
             if measured_temp != last_measured_temp \
                     or (last_measured_temp is None and measured_temp is not None):
                 print("Temperature: " + str(measured_temp) + "ºC ")
-                temperatureToReturn = measured_temp
                 send_temperature(measured_temp)
                 last_measured_temp = measured_temp
 
@@ -71,7 +64,6 @@ def temperatureAndHumiditySensor():
             if measured_humidity != last_measured_humidity \
                     or (last_measured_humidity is None and measured_humidity is not None):
                 print("Humidity: " + str(measured_humidity) + "%")
-                humidityToReturn = measured_humidity
                 send_humidity(measured_humidity)
                 last_measured_humidity = measured_humidity
 
@@ -92,12 +84,18 @@ def sendLocation():
 
         if newdata[0:6] == "$GPRMC":
             newmsg = pynmea2.parse(newdata)
+
             lat = newmsg.latitude
             lng = newmsg.longitude
+
+            while lat != float or (lat < 30 and lat > 50):
+                lat = newmsg.latitude
+            while lng != float or (lng < -20 and lng > 20):
+                lng = newmsg.latitude
             location = str(lat) + ", " + str(lng)
             print("gps location -> " + location)
             send_location(location)
-            time.sleep(10)
+            time.sleep(3600)
 
 
 def initializeWeatherSensor():
@@ -126,23 +124,25 @@ if __name__ == "__main__":
     lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E, pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7],
                   numbering_mode=GPIO.BCM)
 
+    GPIO.setup(16, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(16, GPIO.RISING, callback=changeDisplayMode, bouncetime=50)  # Setup event on pin 16 rising edge
+
     while True:
-        print("Display funcionando!")
-
         if mode == 0:
-
-            if temperatureToReturn >=5 or temperatureToReturn <= 50:
-                lcd.write_string(u'Temperature: ' + str(temperatureToReturn) + 'ºC ')
-            else:
-                lcd.write_string(u'Temperature: ERROR')
+            if last_measured_temp is not None:
+                if last_measured_temp >= 5 or last_measured_temp <= 50:
+                    lcd.write_string(u'Temperature:' + str(last_measured_temp) + ' C ')
+                else:
+                    lcd.write_string(u'Temperature: ERROR')
 
         if mode == 1:
-            if humidityToReturn >= 0 or humidityToReturn <= 100:
-                lcd.write_string(u'Humidity: ' + str(humidityToReturn) + '% ')
-            else:
-                lcd.write_string(u'Humidity: ERROR')
+            if last_measured_humidity is not None:
+                if last_measured_humidity >= 0 or last_measured_humidity <= 100:
+                    lcd.write_string(u'Humidity: ' + str(last_measured_humidity) + '%')
+                else:
+                    lcd.write_string(u'Humidity: ERROR')
 
-        time.sleep(5)
+        time.sleep(1)
         lcd.clear()
 
 
