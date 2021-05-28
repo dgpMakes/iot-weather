@@ -42,8 +42,8 @@ def measurements_retriever(device=None, start=None, end=None):
         elif device is not None and start is not None and end is not None:
             query = ("SELECT temperature, humidity, date, device_id" +
                      " FROM sensor_data" +
-                     " WHERE date BETWEEN STR_TO_DATE('{start}','%d-%m-%Y %h:%i')"
-                     " AND STR_TO_DATE('{end}','%d-%m-%Y %h:%i')" +
+                     " WHERE date BETWEEN STR_TO_DATE('{start}','%d-%m-%Y %H:%i')"
+                     " AND STR_TO_DATE('{end}','%d-%m-%Y %H:%i')" +
                      " ORDER BY date DESC;").format(start=start, end=end)
             mycursor.execute(query)
 
