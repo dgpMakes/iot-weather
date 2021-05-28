@@ -28,6 +28,11 @@ def retrieve_devices():
     return devices_retriever()
 
 
+@app.route('/devices/retrieve/<device>')
+def retrieve_device(device):
+    return devices_retriever(device=device)
+
+
 @app.route('/devices/location', methods=['PUT'])
 def update_device_location():
     parameters = request.get_json()
