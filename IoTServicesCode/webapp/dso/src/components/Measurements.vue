@@ -4,7 +4,16 @@
       <strong>{{ deviceName }}</strong>
     </h1>
 
-    <div class="d-flex">
+    <h4>
+      {{ deviceStatus }} -
+      <a
+        :href="'https://maps.google.com/?q=' + deviceLocation"
+        target="_blank"
+        >{{ deviceLocation }}</a
+      >
+    </h4>
+
+    <div class="d-flex mt-5">
       <div class="date-picker">
         <h5>Date Picker</h5>
 
@@ -110,6 +119,16 @@ export default {
           this.posts = json.data;
         });
     },
+    getDeviceInfo() {
+      fetch(
+        "http://weatherstation.tk:5000/dso/devices/" + this.$route.params.id
+      )
+        .then((response) => response.json())
+        .then((json) => {
+          this.deviceLocation = json.data[0].location;
+          this.deviceStatus = json.data[0].status;
+        });
+    },
     setPages() {
       let numberOfPages = Math.ceil(this.posts.length / this.perPage);
       this.pages = [];
@@ -140,7 +159,9 @@ export default {
   },
   created() {
     this.getPosts();
+    this.getDeviceInfo();
     this.timer = setInterval(this.getPosts, 2000);
+    this.timer = setInterval(this.getDeviceInfo, 2000);
   },
   filters: {
     trimWords(value) {
