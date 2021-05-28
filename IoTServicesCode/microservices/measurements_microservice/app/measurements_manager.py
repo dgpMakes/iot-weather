@@ -37,7 +37,7 @@ def measurements_retriever(device=None, start=None, end=None):
     r = []
     print("device requested -> " + str(device), file=sys.stderr)
     with mydb.cursor() as mycursor:
-        if device == None:
+        if device is None:
             mycursor.execute("SELECT temperature, humidity, date, device_id FROM sensor_data ORDER BY date DESC;")
         elif device is not None and start is not None and end is not None:
             query = ("SELECT temperature, humidity, date, device_id" +

@@ -80,6 +80,8 @@ export default {
     return {
       posts: [""],
       page: 1,
+      deviceLocation: "Loading location...",
+      deviceStatus: "Loading status...",
       perPage: 9,
       pages: [],
       timer: "",
@@ -96,7 +98,7 @@ export default {
   methods: {
     getPosts() {
       fetch(
-        "http://weatherstation.tk:5000/dso/devices/" +
+        "http://weatherstation.tk:5000/dso/measurements/" +
           this.$route.params.id +
           "?start=" +
           dateFormat(this.range.start, "dd-mm-yyyy HH:MM") +

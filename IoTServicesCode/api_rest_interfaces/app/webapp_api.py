@@ -28,8 +28,13 @@ def get_device_list():
                             DEVICES_MICROSERVICE_PORT + "/devices/retrieve")
     return response.content
 
-
 @app.route('/dso/devices/<device>')
+def get_device_by_name(device):
+    response = requests.get(PROTOCOL + DEVICES_MICROSERVICE_SERVER + ":" +
+                            DEVICES_MICROSERVICE_PORT + "/devices/retrieve/" + device)
+    return response.content
+
+@app.route('/dso/measurements/<device>')
 def get_device_data(device):
     start = request.args.get("start", None)
     end = request.args.get("end", None)

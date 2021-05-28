@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 import sys
+from urllib.parse import unquote
 
 DB_HOST = os.getenv("DB_HOST")
 DB_USER = os.getenv("DB_USER")
@@ -49,11 +50,16 @@ def device_status_update(params):
         mydb.close()
 
 
-def devices_retriever():
+def devices_retriever(device=None):
     mydb = connect_database()
     r = []
     with mydb.cursor() as mycursor:
-        mycursor.execute("SELECT device_id, status, location, date FROM devices ORDER BY date DESC;")
+        if device is None:
+            query = "SELECT device_id, status, location, date FROM devices ORDER BY date DESC;"
+        else:
+            query = "SELECT device_id, status, location, date FROM devices WHERE device_id = '" + unquote(device) +\
+                    "'  ORDER BY date DESC;"
+        mycursor.execute(query)
         myresult = mycursor.fetchall()
         for device_id, status, location, date in myresult:
             r.append({"device_id": device_id, "status": status, "location": location, "date": date})
