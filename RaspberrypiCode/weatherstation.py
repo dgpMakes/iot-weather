@@ -42,27 +42,33 @@ mode = 0
 
 
 def changeDisplayMode(_):
-    print("update mode")
+    print("switch mode")
     global mode
     mode = 1 if mode == 0 else 0
 
 
 def temperatureAndHumiditySensor():
+    last_time_temp = time.time()
+    last_time_humidity = time.time()
     while True:
         try:
             global last_measured_temp
             global last_measured_humidity
 
+
             measured_temp = DHT_SENSOR.temperature
             if measured_temp != last_measured_temp \
-                    or (last_measured_temp is None and measured_temp is not None):
+                    or (last_measured_temp is None and measured_temp is not None)\
+                    or time.time() - last_time_temp > 60:
                 print("Temperature: " + str(measured_temp) + "ºC ")
                 send_temperature(measured_temp)
                 last_measured_temp = measured_temp
+                last_time_temp = time.time()
 
             measured_humidity = DHT_SENSOR.humidity
             if measured_humidity != last_measured_humidity \
-                    or (last_measured_humidity is None and measured_humidity is not None):
+                    or (last_measured_humidity is None and measured_humidity is not None)\
+                    or time.time() - last_time_humidity > 60:
                 print("Humidity: " + str(measured_humidity) + "%")
                 send_humidity(measured_humidity)
                 last_measured_humidity = measured_humidity
@@ -88,11 +94,6 @@ def sendLocation():
             lat = newmsg.latitude
             lng = newmsg.longitude
 
-            '''
-            while lat != float or (lat < 30 and lat > 50):
-                lat = newmsg.latitude
-            while lng != float or (lng < -20 and lng > 20):
-                lng = newmsg.latitude'''
 
             location = str(lat) + ", " + str(lng)
             print("gps location -> " + location)
